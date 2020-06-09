@@ -33,39 +33,8 @@ def simplecal_home():
 
 @app.route('/calendar/<calendar_id>', methods=['GET', 'POST'])
 def calendar(calendar_id):
-    # Make sure the game ID is numeric and greater than zero
-#    try:
-#        game_id_int = int(game_id)
-#        if game_id_int < 0:
-#            return ('Page not found', 404)
-#    except ValueError:
-#        return ('Page not found', 404)
-#
-#    g = Game.query.filter_by(id=game_id).first()
-#    if g is None:
-#        return ('Page not found', 404)
-
-#    return render_template('gameplay.html',
-#                       game_id=game_id,
-#                       phase=g.phase,
-#                       count=g.count,
-#                       player_one=player_one.username,
-#                       player_two=player_two.username,
-#                       dealer=dealer,
-#                       player_cards=player_cards,
-#                       opponent_card_count=opponent_card_count,
-#                       crib_card_count=crib_card_count,
-#                       played_cards=g.get_played_cards(),
-#                       starter_card=g.card_to_obj(g.starter_card),
-#                       player_score=player_score,
-#                       opponent_score=opponent_score,
-#                       player_one_score=g.player_one_score,
-#                       player_two_score=g.player_two_score,
-#                       is_player_turn=is_player_turn,
-#                       is_ongoing=g.is_ongoing,
-#                       actions=actions)
-
-    return ('Calendar with id: ' + str(calendar_id))
+    #return ('Calendar with id: ' + str(calendar_id))
+    return render_template("calendar.html", id=calendar_id)
 
     #csrf.protect() #??
 
