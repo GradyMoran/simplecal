@@ -1,4 +1,4 @@
-#need to cite https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world , I am using first five tutorials heavily
+#Mega thanks to https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
 from enum import Enum
 from random import randint
 
@@ -36,6 +36,7 @@ def send_fc(path):
 def simplecal_home():
     return render_template('home.html', title='Home')
 
+#POST not needed here. Conceptually, how new events get added/removed from the calender database is there needs to be a javascript function invoked when the user modifies/adds/deletes an event (how?) that makes a post request to the server with the data for that event, somehow. I do not want a "save" button.
 @app.route('/calendar/<calendar_id>', methods=['GET', 'POST'])
 def calendar(calendar_id):
     #return ('Calendar with id: ' + str(calendar_id))
