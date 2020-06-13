@@ -3,14 +3,14 @@ from enum import Enum
 from random import randint
 
 from flask import Flask
-from flask import render_template, flash, redirect, request, session, url_for
+from flask import render_template, flash, redirect, request, session, url_for, send_from_directory
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import or_
 
 from db import get_db, init_db
 from forms import TestForm
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 #the following line "creates a token that is used to protect against csrf attacks".
 # Should learn what it does and include in report... I'm just following a tutorial.
 app.config['SECRET_KEY'] = 'change-me' #probably want to do an environment variable
@@ -26,6 +26,11 @@ init_db(app)
 
 # These models have to be imported after the database connection is initialized
 from models import CalData
+
+#TODO: when this is deployed on a real web server, need to change this part as well as some config in the web server integration to make the web server give these pages instead of going through flask. This is a workaround to use the flask dev server. This method should be removed when deployed. https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
+@app.route('/calendar/fullcalendar/<path:path>')
+def send_fc(path):
+    return send_from_directory('fullcalendar', path)
 
 @app.route('/')
 def simplecal_home():
