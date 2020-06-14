@@ -9,6 +9,7 @@
 <script src='fullcalendar/interaction/main.js'></script>
 <script src='fullcalendar/daygrid/main.js'></script>
 <script src='fullcalendar/timegrid/main.js'></script>
+<script src="jquery/jquery-3.5.1.js"></script>
 <script>
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -39,6 +40,25 @@
       },
       editable: true,
       eventLimit: true, // allow "more" link when too many events
+      eventDrop: function(info) {
+        alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+
+        if (!confirm("Are you sure about this change?")) {
+          info.revert();
+        }
+      },
+      eventPositioned: function(info) { //this runs after any event change?
+        alert("in eventPositioned");
+        $.post('/update', {
+          id: info.event.id,
+          groupid: info.event.groupid,
+          allDay: info.event.allDay,
+          start: info.event.start,
+          end: info.event.end,
+          title: info.event.title,
+          url: info.event.url
+        });
+      },
       events: [
         {
           title: 'All Day Event',

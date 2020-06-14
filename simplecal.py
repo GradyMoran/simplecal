@@ -32,6 +32,10 @@ from models import CalData
 def send_fc(path):
     return send_from_directory('fullcalendar', path)
 
+@app.route('/calendar/jquery/<path:path>')
+def send_jquery(path):
+    return send_from_directory('jquery', path)
+
 @app.route('/')
 def simplecal_home():
     return render_template('home.html', title='Home')
@@ -46,5 +50,9 @@ def calendar(calendar_id):
 
     #get_db().session.commit() #will have to do stuff like this
 
+@app.route('/update', methods=['POST'])
+def update():
+    print(str(request.form))
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
