@@ -9,7 +9,7 @@
 <script src='fullcalendar/interaction/main.js'></script>
 <script src='fullcalendar/daygrid/main.js'></script>
 <script src='fullcalendar/timegrid/main.js'></script>
-<script src="jquery/jquery-3.5.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -26,39 +26,38 @@
       navLinks: true, // can click day/week names to navigate views
       selectable: true,
       selectMirror: true,
+      //add new event
       select: function(arg) {
         var title = prompt('Event Title:');
         if (title) {
-          calendar.addEvent({
+          let tmpEvent = {
             title: title,
             start: arg.start,
             end: arg.end,
             allDay: arg.allDay
-          })
+          };
+          console.log(tmpEvent);
+          calendar.addEvent(tmpEvent);
+          $.post('/update', {
+            id: tmpEvent.id,
+            groupid: tmpEvent.groupid,
+            allDay: tmpEvent.allDay,
+            start: tmpEvent.start,
+            end: tmpEvent.end,
+            title: tmpEvent.title,
+            url: tmpEvent.url,
+            calendarId: "{{ calendarId }}"
+          });
+          console.log("Created post");
         }
-        calendar.unselect()
+        calendar.unselect();
+      },
+      //edit/delete an event
+      eventClick: function(eventClickInfo) {
+        console.log(eventClickInfo.event);
       },
       editable: true,
       eventLimit: true, // allow "more" link when too many events
-      eventDrop: function(info) {
-        alert(info.event.title + " was dropped on " + info.event.start.toISOString());
-
-        if (!confirm("Are you sure about this change?")) {
-          info.revert();
-        }
-      },
-      eventPositioned: function(info) { //this runs after any event change?
-        alert("in eventPositioned");
-        $.post('/update', {
-          id: info.event.id,
-          groupid: info.event.groupid,
-          allDay: info.event.allDay,
-          start: info.event.start,
-          end: info.event.end,
-          title: info.event.title,
-          url: info.event.url
-        });
-      },
       events: [
         {
           title: 'All Day Event',
@@ -139,6 +138,7 @@
 </head>
 <body>
 
+  {{ calendarId }}
   <div id='calendar'></div>
 
 </body>

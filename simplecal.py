@@ -8,19 +8,18 @@ from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import or_
 
 from db import get_db, init_db
-from forms import TestForm
 
 app = Flask(__name__, static_url_path='')
 #the following line "creates a token that is used to protect against csrf attacks".
 # Should learn what it does and include in report... I'm just following a tutorial.
-app.config['SECRET_KEY'] = 'change-me' #probably want to do an environment variable
+#app.config['SECRET_KEY'] = 'change-me' #probably want to do an environment variable
 
 #probably want to set this to an environment variable too
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/simplecal/database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-csrf = CSRFProtect()
-csrf.init_app(app)
+#csrf = CSRFProtect()
+#csrf.init_app(app)
 
 init_db(app)
 
@@ -44,7 +43,7 @@ def simplecal_home():
 @app.route('/calendar/<calendar_id>', methods=['GET', 'POST'])
 def calendar(calendar_id):
     #return ('Calendar with id: ' + str(calendar_id))
-    return render_template("calendar.html", id=calendar_id)
+    return render_template("calendar.html", calendarId=calendar_id)
 
     #csrf.protect() #??
 
@@ -53,6 +52,7 @@ def calendar(calendar_id):
 @app.route('/update', methods=['POST'])
 def update():
     print(str(request.form))
+    return "200 OK"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
