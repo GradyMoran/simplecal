@@ -5,9 +5,11 @@ from random import randint
 from flask import Flask
 from flask import render_template, flash, redirect, request, session, url_for, send_from_directory
 from flask_wtf.csrf import CSRFProtect
+#why is this sqlalchemy, not flask_sqlalchemy?
 from sqlalchemy import or_
+from flask_migrate import Migrate
 
-from db import get_db, init_db
+from db import get_db, init_db, get_migrate
 
 app = Flask(__name__, static_url_path='')
 #the following line "creates a token that is used to protect against csrf attacks".
