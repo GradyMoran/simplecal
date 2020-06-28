@@ -1,6 +1,5 @@
 #Mega thanks to https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
-from enum import Enum
-from random import randint
+import os
 
 from flask import Flask
 from flask import render_template, flash, redirect, request, session, url_for, send_from_directory
@@ -17,7 +16,7 @@ app = Flask(__name__, static_url_path='')
 #app.config['SECRET_KEY'] = 'change-me' #probably want to do an environment variable
 
 #probably want to set this to an environment variable too
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/simplecal/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #csrf = CSRFProtect()
@@ -26,7 +25,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 init_db(app)
 
 # These models have to be imported after the database connection is initialized
-from models import CalData
+from models import CalData, Event
 
 #TODO: when this is deployed on a real web server, need to change this part as well as some config in the web server integration to make the web server give these pages instead of going through flask. This is a workaround to use the flask dev server. This method should be removed when deployed. https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
 @app.route('/calendar/fullcalendar/<path:path>')
