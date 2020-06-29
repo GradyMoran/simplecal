@@ -32,23 +32,17 @@ from models import CalData, Event
 def send_fc(path):
     return send_from_directory('fullcalendar', path)
 
-@app.route('/calendar/jquery/<path:path>')
-def send_jquery(path):
-    return send_from_directory('jquery', path)
-
 @app.route('/')
 def simplecal_home():
     return render_template('home.html', title='Home')
 
 #POST not needed here. Conceptually, how new events get added/removed from the calender database is there needs to be a javascript function invoked when the user modifies/adds/deletes an event (how?) that makes a post request to the server with the data for that event, somehow. I do not want a "save" button.
-@app.route('/calendar/<calendar_id>', methods=['GET', 'POST'])
+@app.route('/calendar/<calendar_id>', methods=['GET'])
 def calendar(calendar_id):
-    #return ('Calendar with id: ' + str(calendar_id))
-    return render_template("calendar.html", calendarId=calendar_id)
+    cal = CalData.query.get_or_404(int(calendar_id))
+    return render_template("calendar.html", calendarId=calendar_id, events=cal.events)
 
     #csrf.protect() #??
-
-    #get_db().session.commit() #will have to do stuff like this
 
 @app.route('/update', methods=['POST'])
 def update():

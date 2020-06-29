@@ -59,6 +59,31 @@
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [
+        {% for event in events %}
+          {
+            title: '{{ event.title }}'
+
+            {% if event.groupid %}
+              , groupId: '{{ event.groupid }}'
+            {% endif %}
+
+            {% if event.start %}
+              , start: '{{ event.start }}'
+            {% endif %}
+
+            {% if event.end %}
+              , end: '{{ event.end }}'
+            {% endif %}
+
+            {% if event.url %}
+              , url: '{{ event.url }}'
+            {% endif %}
+          },
+        {% endfor %}
+          //the above loop will put a comma after the final entry, so the events list will be improperly formatted. I hope putting an empty event at the end fixes it without anything complaining.
+          {}
+      ]
+/*
         {
           title: 'All Day Event',
           start: '2020-05-01'
@@ -113,7 +138,7 @@
           url: 'http://google.com/',
           start: '2020-05-28'
         }
-      ]
+      ]*/
     });
 
     calendar.render();
