@@ -3,14 +3,18 @@ A simple online shared calendar with no authentication
 
 sudo pip3 install -r requirements.txt
 
+something about creating db and applying schema? not sure what command this is
+
 https://github.com/GradyMoran/simplecal
 
 TODO (rougly in order):
-Add other plugins to the calendar
+edit/delete events
 
-Find how to pass calendar data to the calendar when you load it. Should happen on python side
+time of day support
 
-how to pass new calendar entries to python?
+change calendar ID from int to string type
+
+securify/robustify
 
 Save/load from database
     (how to do prepared statements here?)
