@@ -1,5 +1,6 @@
 #Mega thanks to https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
 import os
+import datetime
 
 from flask import Flask
 from flask import render_template, flash, redirect, request, session, url_for, send_from_directory
@@ -44,10 +45,25 @@ def calendar(calendar_id):
 
     #csrf.protect() #??
 
+#TODO: error handling, etc
+#May want to separate into update/delete/edit functionalities, or else we'll need a separate parameter to determine what to do, or something weird.
 @app.route('/update', methods=['POST'])
 def update():
     print(str(request.form))
-    return "200 OK"
+    #check if request.form?
+    #'Mon Jun 22 2020 00:00:00 GMT-0400 (Eastern Daylight Time)'
+    #may break if user-side locale differs from server-side. consider different format?
+    start_str = request.form["start"].split("(")[0].strip()
+    #print("start_str: " + start_str)
+    start_dt = datetime.datetime.strptime(start_str, "%a %b %d %Y %H:%M:%S GMT%z")
+    #print("start_dt: " + str(start_dt))
+    end_str = request.form["end"].split("(")[0].strip()
+    end_dt = datetime.datetime.strptime(end_str, "%a %b %d %Y %H:%M:%S GMT%z")
+    event = Event(start=start_dt, end=end_dt, title=request.form["title"], caldata=CalData.query.get_or_404(int(request.form["calendarId"])))
+    conn = get_db()
+    conn.session.add(event)
+    conn.session.commit()
+    return "200 OK" #??
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
