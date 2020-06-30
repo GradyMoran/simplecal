@@ -7,7 +7,7 @@ migrate = None
 def init_db(app):
     global db
     db = SQLAlchemy(app)
-    migrate = Migrate(app, db, render_as_batch=True)
+    migrate = Migrate(app, db, render_as_batch=True, compare_type=True)
 
 def get_db():
     return db

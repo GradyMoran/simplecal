@@ -5,7 +5,7 @@ from itertools import combinations
 from random import randint, shuffle
 
 class CalData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(64), primary_key=True)
     events = db.relationship('Event', backref='caldata', lazy=True)
 
     def __repr__(self):

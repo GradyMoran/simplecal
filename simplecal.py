@@ -40,10 +40,14 @@ def simplecal_home():
 #POST not needed here. Conceptually, how new events get added/removed from the calender database is there needs to be a javascript function invoked when the user modifies/adds/deletes an event (how?) that makes a post request to the server with the data for that event, somehow. I do not want a "save" button.
 @app.route('/calendar/<calendar_id>', methods=['GET'])
 def calendar(calendar_id):
-    cal = CalData.query.get_or_404(int(calendar_id))
+    cal = CalData.query.get_or_404(calendar_id)
     return render_template("calendar.html", calendarId=calendar_id, events=cal.events)
 
     #csrf.protect() #??
+
+@app.route('/new', methods=['GET'])
+def new_calendar():
+    return "404"
 
 #TODO: error handling, etc
 #May want to separate into update/delete/edit functionalities, or else we'll need a separate parameter to determine what to do, or something weird.
@@ -59,7 +63,7 @@ def update():
     #print("start_dt: " + str(start_dt))
     end_str = request.form["end"].split("(")[0].strip()
     end_dt = datetime.datetime.strptime(end_str, "%a %b %d %Y %H:%M:%S GMT%z")
-    event = Event(start=start_dt, end=end_dt, title=request.form["title"], caldata=CalData.query.get_or_404(int(request.form["calendarId"])))
+    event = Event(start=start_dt, end=end_dt, title=request.form["title"], caldata=CalData.query.get_or_404(request.form["calendarId"]))
     conn = get_db()
     conn.session.add(event)
     conn.session.commit()
