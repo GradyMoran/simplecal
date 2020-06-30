@@ -1,6 +1,8 @@
 #Mega thanks to https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
-import os
 import datetime
+import os
+import random
+import string
 
 from flask import Flask
 from flask import render_template, flash, redirect, request, session, url_for, send_from_directory
@@ -47,7 +49,21 @@ def calendar(calendar_id):
 
 @app.route('/new', methods=['GET'])
 def new_calendar():
-    return "404"
+    cal_id_len = 64
+    id_gen_tries = 10
+    tries = 0
+    letters = string.ascii_letters + string.digits
+    tmp_id = ''.join([random.choice(letters) for i in range(0, cal_id_len)])
+    while((CalData.query.get(tmp_id) is not None) and (tries < id_gen_tries)):
+        tries += 1
+        tmp_id = ''.join([random.choice(letters) for i in range(0, cal_id_len)])
+    if tries >= id_gen_tries:
+        return "400"
+    new_cal = CalData(id=tmp_id)
+    conn = get_db()
+    conn.session.add(new_cal)
+    conn.session.commit()
+    return redirect("/calendar/" + tmp_id)
 
 #TODO: error handling, etc
 #May want to separate into update/delete/edit functionalities, or else we'll need a separate parameter to determine what to do, or something weird.
